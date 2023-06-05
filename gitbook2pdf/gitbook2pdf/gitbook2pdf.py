@@ -84,6 +84,8 @@ class Gitbook2PDF():
             
         phar.set_description("处理完成！")   
         phar.close()
+        if not os.path.exists(OUT_DIR):
+            os.makedirs(OUT_DIR)
         with open(os.path.join(OUT_DIR,self.fname), "wb") as f:
             merger.write(f)
         print('生成PDF ',self.fname,'完成!')
