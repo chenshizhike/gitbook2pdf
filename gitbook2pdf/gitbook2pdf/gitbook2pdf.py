@@ -28,11 +28,11 @@ def load_gitbook_css():
     ) as f:
         return f.read()
 
-def get_html(uri):
+def get_html(url):
     headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36'
     }
-    return requests.get(uri,headers=headers, timeout=10).text  
+    return requests.get(url,headers=headers, timeout=10).text  
 
 class Gitbook2PDF():
     def __init__(self, base_url, fname=None):
@@ -65,7 +65,7 @@ class Gitbook2PDF():
         
         merger = PdfMerger()
         bmparent = None
-        print("Generating " + self.fname)
+        print("生成PDF " + self.fname)
         phar = tqdm(total=len(content_urls))
         for index,obj in enumerate(content_urls):
             phar.set_description("处理中 ： %s" % obj['title'])
@@ -73,6 +73,11 @@ class Gitbook2PDF():
             html_g.add_body(self.content_list[index])
             html_text = html_g.output()
             css_text = load_gitbook_css()
+            
+            if not os.path.exists(OUT_DIR+"_build") :
+                os.makedirs(OUT_DIR+"_build")
+            with open(OUT_DIR+"_build/" +str(index)+".html","w",encoding="utf-8") as f:
+                f.write(html_text)
             
             byte = self.write_pdf(html_text,css_text)
             reader = PdfReader(BytesIO(byte));
@@ -87,7 +92,7 @@ class Gitbook2PDF():
         phar.close()
         with open(os.path.join(OUT_DIR,self.fname), "wb") as f:
             merger.write(f)
-        print('Generated ',self.fname,'OK!')
+        print('生成PDF ',self.fname,'完成!')
 
     def write_pdf(self,html_text,css_text):
         tmphtml = weasyprint.HTML(string=html_text)
