@@ -16,7 +16,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
     && apk update \
     && apk --no-cache add pango \
     && rm -rf /var/cache/apk/* \
-    && rm -rf /root/.wget-hsts \
     && rm -rf /tmp/*
 
 USER $USERNAME

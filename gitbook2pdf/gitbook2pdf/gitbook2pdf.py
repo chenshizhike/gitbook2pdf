@@ -19,12 +19,11 @@ from PyPDF2 import PdfReader, PdfMerger
 from .ChapterParser import ChapterParser
 from .HtmlGenerator import HtmlGenerator
 
-BASE_DIR = os.path.dirname(__file__)
-OUT_DIR = "./output"
+OUT_DIR = os.path.expandvars('$HOME') + "/Workspace/gitbook2pdf"
 
 def load_gitbook_css():
     with open(
-        os.path.join(BASE_DIR, './libs/gitbook.css'), 'r'
+        os.path.join(os.path.dirname(__file__), './libs/gitbook.css'), 'r'
     ) as f:
         return f.read()
 
@@ -73,11 +72,6 @@ class Gitbook2PDF():
             html_g.add_body(self.content_list[index])
             html_text = html_g.output()
             css_text = load_gitbook_css()
-            
-            if not os.path.exists(OUT_DIR+"_build") :
-                os.makedirs(OUT_DIR+"_build")
-            with open(OUT_DIR+"_build/" +str(index)+".html","w",encoding="utf-8") as f:
-                f.write(html_text)
             
             byte = self.write_pdf(html_text,css_text)
             reader = PdfReader(BytesIO(byte));
