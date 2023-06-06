@@ -11,10 +11,9 @@ RUN addgroup --gid $GID $USERNAME \
     && mkdir $BOOKDIR \
     && chown -R $UID:$GID $BOOKDIR
 
-# Install jpeg-dev pango-dev libxslt-dev zlib-dev libffi-dev cairo-dev gdk-pixbuf-dev
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
     && apk update \
-    && apk --no-cache add jpeg-dev pango-dev libxslt-dev zlib-dev libffi-dev cairo-dev gdk-pixbuf-dev \
+    && apk --no-cache add pango gdk-pixbuf-dev \
     && rm -rf /var/cache/apk/* \
     && rm -rf /tmp/*
 
