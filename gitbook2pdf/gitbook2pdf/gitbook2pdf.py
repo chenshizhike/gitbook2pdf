@@ -19,7 +19,7 @@ from PyPDF2 import PdfReader, PdfMerger
 from .ChapterParser import ChapterParser
 from .HtmlGenerator import HtmlGenerator
 
-OUT_DIR = os.path.expandvars('$HOME') + "/Workspace/gitbook2pdf"
+OUT_DIR = "./output"
 
 def load_gitbook_css():
     with open(
@@ -74,7 +74,8 @@ class Gitbook2PDF():
             css_text = load_gitbook_css()
             
             byte = self.write_pdf(html_text,css_text)
-            reader = PdfReader(BytesIO(byte));
+            reader = PdfReader(BytesIO(byte),strict=False);
+
             if obj['level'] == 2:
                 bmparent = merger.add_outline_item(obj['title'],pagenum=len(merger.pages));
             else :

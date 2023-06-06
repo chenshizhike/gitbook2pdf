@@ -1,20 +1,20 @@
 FROM python:3.9.16-alpine
 
-ENV USERNAME=gitbook2pdf GID=1000 UID=1000
+ENV USERNAME=app GID=1000 UID=1000
 
 ENV LANG=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8 
 
-ENV BOOKDIR /gitbook2pdf
+ENV BOOKDIR /app
 
 RUN addgroup --gid $GID $USERNAME \
     && adduser --uid $UID --ingroup $USERNAME --disabled-password $USERNAME \
     && mkdir $BOOKDIR \
     && chown -R $UID:$GID $BOOKDIR
 
-# Install language pack
+# Install jpeg-dev pango-dev libxslt-dev zlib-dev libffi-dev cairo-dev gdk-pixbuf-dev
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
     && apk update \
-    && apk --no-cache add pango \
+    && apk --no-cache add jpeg-dev pango-dev libxslt-dev zlib-dev libffi-dev cairo-dev gdk-pixbuf-dev \
     && rm -rf /var/cache/apk/* \
     && rm -rf /tmp/*
 
